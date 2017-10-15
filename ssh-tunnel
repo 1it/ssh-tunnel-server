@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# Default variables
+# SOURCE_PORTS="8000 8001"
+# REMOTE_HOST=remote.example.com
+REMOTE_PORTS=10000
+REMOTE_BIND=0.0.0.0
+REMOTE_USER=robot
+
+if [ -f ~/.ssh-tunnel ]; then
+    . ~/.ssh-tunnel
+fi
+
+ssh_tunnel_start () {
+for port in $SOURCE_PORTS; do
+    if ! ssh -q -S ssh-robot-$port -O check $REMOTE_USER@$REMOTE_HOST; then
+        ssh -M -S ssh-robot-$port -g -f -N -T -R$REMOTE_BIND:$((REMOTE_PORTS + port)):localhost:$port $REMOTE_USER@$REMOTE_HOST
+    fi
+done
+}
+
+ssh_tunnel_stop () {
+for port in $SOURCE_PORTS; do
+    ssh -S ssh-robot-$port -O exit $REMOTE_USER@$REMOTE_HOST
+done
+}
+
+for option in "$@"; do
+    case $option in
+        start)
+            ssh_tunnel_start
+            ;;
+        stop)
+            ssh_tunnel_stop
+            ;;
+        *|"")
+            echo "Use start or stop options"
+            echo "like:  ssh-tunnel start"
+            exit 1
+            ;;
+    esac
+done
+
+if [[ $1 = "" ]]; then
+    echo "Use start or stop options"
+    echo "like:  ssh-tunnel start"
+    exit 1
+fi
