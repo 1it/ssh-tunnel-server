@@ -15,8 +15,6 @@ if [ ! -f /home/$REMOTE_USER/.ssh/id_rsa ]; then
     sudo -u $REMOTE_USER ssh-keygen -q -t rsa -b 2048 -f /home/$REMOTE_USER/.ssh/id_rsa -P ""
     echo "Put the below key to the master server file: /home/$REMOTE_USER/.ssh/authorized_keys"
     cat /home/$REMOTE_USER/.ssh/id_rsa.pub
-    echo "Wait until the new key is set up; Press Ctrl+C to continue"
-    sleep 120
 fi
 
 # Copy ssh-tunnel script to robot home dir
@@ -27,16 +25,15 @@ fi
 
 # Create cron-job
 if [ -v SOURCE_PORTS ]; then
-    echo -e "$SOURCE_PORTS\n" > /etc/cron.d/ssh-tunnel
+    echo -e "SOURCE_PORTS='$SOURCE_PORTS'" > /etc/cron.d/ssh-tunnel
 fi
 
 if [ -v REMOTE_HOST ]; then
-    echo -e "$REMOTE_HOST\n" >> /etc/cron.d/ssh-tunnel
+    echo -e "REMOTE_HOST=$REMOTE_HOST\n" >> /etc/cron.d/ssh-tunnel
 fi
 
-if [ ! -f /etc/cron.d/ssh-tunnel ]; then
-    echo -e "*/5 * * * * robot /home/$REMOTE_USER/ssh-tunnel start\n" >> /etc/cron.d/ssh-tunnel
+if ! grep -q "$REMOTE_USER" /etc/cron.d/ssh-tunnel; then
+    echo -e "*/5 * * * * $REMOTE_USER /home/$REMOTE_USER/ssh-tunnel start\n" >> /etc/cron.d/ssh-tunnel
 fi
 
 echo "All set!"
-

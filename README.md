@@ -29,7 +29,7 @@ cd ssh-tunnel-server; SOURCE_PORTS="22 80" REMOTE_HOST="remote.example.com" ./cl
 ```
 You will see the ssh-rsa key line in script stdout and this message:
 ```
-Put this key to your master server; Press Ctrl+C to continue
+"Put the below key to the master server file: /home/$REMOTE_USER/.ssh/authorized_keys"
 ```
 So, copy this line and paste it to the master server's /home/robot/.ssh/authorized_keys file.
 And that's all.
