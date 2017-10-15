@@ -23,9 +23,10 @@ if [ ! -d /home/$REMOTE_USER/.ssh/ ]; then
 fi
 
 # Check authorized_keys
-if [ -f /home/$REMOTE_USER/.ssh/authorized_keys ]; then
+if [ ! -f /home/$REMOTE_USER/.ssh/authorized_keys ]; then
     touch /home/$REMOTE_USER/.ssh/authorized_keys
     chmod 0600 /home/$REMOTE_USER/.ssh/authorized_keys
+    chown $REMOTE_USER: /home/$REMOTE_USER/.ssh/authorized_keys
 fi
 
 echo 'All set!'

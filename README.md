@@ -17,7 +17,7 @@ Use root or other fully privileged user account (with sudo)
 git clone https://github.com/1it/ssh-tunnel-server.git
 ```
 ```sh
-cd ssh-tunnel-server; SOURCE_PORTS="22 80" REMOTE_HOST="remote.example.com" ./server-bootstrap.sh
+cd ssh-tunnel-server; ./server-bootstrap.sh
 ```
 
 ## Initial client setup
@@ -25,7 +25,7 @@ cd ssh-tunnel-server; SOURCE_PORTS="22 80" REMOTE_HOST="remote.example.com" ./se
 git clone https://github.com/1it/ssh-tunnel-server.git
 ```
 ```sh
-cd ssh-tunnel-server; ./client-bootstrap.sh
+cd ssh-tunnel-server; SOURCE_PORTS="22 80" REMOTE_HOST="remote.example.com" ./client-bootstrap.sh
 ```
 You will see the ssh-rsa key line in script stdout and this message:
 ```
