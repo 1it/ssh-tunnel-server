@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
 # Default variables
-# SOURCE_PORTS="8000 8001"
+# SOURCE_PORTS="22 80"
 # REMOTE_HOST=remote.example.com
-REMOTE_PORTS=10000
 REMOTE_BIND=0.0.0.0
 REMOTE_USER=robot
+
 ssh_opts="-o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes"
+
+if [ -z $REMOTE_PORTS ]; then
+    REMOTE_PORTS=10000
+fi
 
 if [ -f ~/.ssh-tunnel ]; then
     . ~/.ssh-tunnel
