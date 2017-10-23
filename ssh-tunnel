@@ -18,15 +18,15 @@ fi
 
 ssh_tunnel_start () {
 for port in $SOURCE_PORTS; do
-    if ! ssh -q -S ssh-robot-$port -O check $REMOTE_USER@$REMOTE_HOST; then
-        ssh -M -S ssh-robot-$port -g -f -N -T -R$REMOTE_BIND:$((REMOTE_PORTS + port)):localhost:$port $REMOTE_USER@$REMOTE_HOST $ssh_opts
+    if ! ssh -q -S /tmp/ssh-robot-$port -O check $REMOTE_USER@$REMOTE_HOST; then
+        ssh -M -S /tmp/ssh-robot-$port -g -f -N -T -R$REMOTE_BIND:$((REMOTE_PORTS + port)):localhost:$port $REMOTE_USER@$REMOTE_HOST $ssh_opts
     fi
 done
 }
 
 ssh_tunnel_stop () {
 for port in $SOURCE_PORTS; do
-    ssh -S ssh-robot-$port -O exit $REMOTE_USER@$REMOTE_HOST
+    ssh -S /tmp/ssh-robot-$port -O exit $REMOTE_USER@$REMOTE_HOST
 done
 }
 
